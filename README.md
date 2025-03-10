@@ -1,61 +1,64 @@
-# Zadanie rekrutacyjne
-
-Utworzenie prostej strony z tabelą rekordów zapisanych w bazie danych.
-
-| Lp. | Nr rejestracyjny | Marka    | Model   | Typ pojazdu | Data utworzenia    | Data modyfikacji | Akcje   |
-|-----|------------------|----------|---------|-------------|--------------------|------------------|---------|
-| 1   | DW22233          | Mercedes | MP-4    | ciężarowy   | 2020-05-05 12:25   | 2021-06-07 15:05 | (e) (d) |
-| 2   | BORQ4500         | MAN      | TGE     | bus         | 2021-06-06 14:01   | 2021-06-06 14:01 | (e) (d) |
-| 3   | DW33445          | Toyota   | Corolla | osobowy     | 2021-07-05 10:25   | 2021-08-07 12:05 | (e) (d) |
-
-Tabelka powinna zawierać kolumny:
-* Lp.
-* Numer rejestracyjny pojazdu
-* Marka
-* Model
-* Typ pojazdu (osobowy, bus, ciężarowy)
-* Data utworzenia
-* Data modyfikacji
-* Akcje (bez sortowania)
-
-## Wymagania:
-
-1. Numer rejestracyjny wielkimi literami.
-2. Data w formacie: `YYYY-MM-DD HH:MM`.
-3. Kolumna akcje zawierać ma dwie ikony akcji: edycja + usuwanie.
-4. Do tabeli, dodawania i edycji rekordów należy skorzystać z Vue (wraz z biblioteką
-   Vuetify - https://v2.vuetifyjs.com/en/components/data-tables/), dane wprowadzamy w popupie i zapisujemy)
-5. W naszej firmie korzystamy z Composera (PHP), Yarn, Axios, webpack (JS), SASS (css).
-6. Tabela powinna uwzględniać sortowanie oraz paginację rekordów (po stronie frontu).
-7. Wymagane jest podejście DDD (bez użycia CQRS - struktura katalogów niżej).
-8. Kod umieść na GitHubie jako **repozytorium publiczne**. Nie twórz fork'a z naszego repozytorium. Pobierz nasz kod, zaincjalizuj tam git'a i wypuść na swoje repozytorium.
-
-## Struktura DDD (uproszczona) na przykładzie użycia w naszej firmie:
-
-* src
-    * Domain
-        * Entity
-            * Vehicle.php
-        * Repository
-            * VehicleRepositoryInterface.php (interfejsy repozytorium)
-        * Service
-            * VehiclesBuilder.php (budowanie listy)
-            * VehiclesReader.php (odczytywanie, np. jednego rekordu)
-            * VehiclesWriter.php (zapis i aktualizacja)
-        * ValueObject
-    * Persistence
-        * Repository
-            * VehicleRepository.php (implementacja repozytoriów)
-
-## Uruchomienie projektu
-- `composer install`
-- `touch db/assqlite.db` - utworzenie pliku bazy danych
-- `yarn install`
-- `yarn dev`
-- `php -S localhost:8008` - uruchomienie serwera
-
-#### Utworzenie tabeli pojazdów (vehicles) w SQLite:
-```SQL
+# Recruitment Task
+ 
+Create a simple page with a table of records stored in a database.
+ 
+| No. | Registration Number | Brand    | Model   | Vehicle Type | Creation Date       | Modification Date  | Actions  |
+|----|------------------|----------|---------|--------------|--------------------|------------------|---------|
+| 1  | DW22233         | Mercedes | MP-4    | Truck        | 2020-05-05 12:25   | 2021-06-07 15:05 | (e) (d) |
+| 2  | BORQ4500        | MAN      | TGE     | Bus          | 2021-06-06 14:01   | 2021-06-06 14:01 | (e) (d) |
+| 3  | DW33445         | Toyota   | Corolla | Passenger    | 2021-07-05 10:25   | 2021-08-07 12:05 | (e) (d) |
+ 
+The table should contain the following columns:
+- No.
+- Vehicle registration number
+- Brand
+- Model
+- Vehicle type (passenger, bus, truck)
+- Creation date
+- Modification date
+- Actions (without sorting)
+ 
+## Requirements:
+ 
+1. The registration number must be in uppercase letters.
+2. The date format should be: `YYYY-MM-DD HH:MM`.
+3. The actions column should contain two action icons: edit + delete.
+4. Use Vue for the table, adding, and editing records (along with the Vuetify library - [Vuetify v2](https://v2.vuetifyjs.com/en/components/data-tables/)). Data should be entered in a popup and saved.
+5. Our company uses Composer (PHP), Yarn, Axios, Webpack (JS), and SASS (CSS).
+6. The table should support sorting and pagination (handled on the frontend).
+7. The DDD approach is required (without using CQRS - see directory structure below).
+8. Upload the code to **a public GitHub/GitLab repository**. Do not fork our repository. Download our code, initialize Git in it, and push it to your own repository.
+ 
+## Simplified DDD Structure (example from our company):
+ 
+```
+src
+│── Domain
+│   ├── Entity
+│   │   ├── Vehicle.php
+│   ├── Repository
+│   │   ├── VehicleRepositoryInterface.php (repository interfaces)
+│   ├── Service
+│   │   ├── VehiclesBuilder.php (list building)
+│   │   ├── VehiclesReader.php (reading, e.g., a single record)
+│   │   ├── VehiclesWriter.php (saving and updating)
+│   ├── ValueObject
+│── Persistence
+│   ├── Repository
+│   │   ├── VehicleRepository.php (repository implementation)
+```
+ 
+## Project Setup
+```sh
+composer install
+touch db/assqlite.db  # create a database file
+yarn install
+yarn dev
+php -S localhost:8008  # start the server
+```
+ 
+### Creating the `vehicles` table in SQLite:
+```sql
 CREATE TABLE vehicles (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   registration_number TEXT(16),
@@ -66,20 +69,21 @@ CREATE TABLE vehicles (
   updated_at INTEGER
 );
 ```
-
-## Endpointy
-- `/vehicles` [GET] - index, główny szablon
-- `/vehicles/list` [GET] - lista pojazdów
-- `/vehicles/save/{id}` [POST] - zapis pojazdu
-- `/vehicles/delete/{id}` [POST] - usunięcie pojazdu
-
-## Działanie z kodem - co trzeba zrobić?
-Do uzupełnienia jest kontroler `/app/Controller/VehicleController.php` oraz klasy w strukturze DDD w katalogu `/src`.
-
-Całość tabeli i komponentów w Vuetify do uzupełnienia jest w katalogu `/resources`.
-Skorzystaj z zainstalowanego już `axios`'a do wywoływania endpointów. Skorzystaj z tabeli `VDataTable` Vuetify i **nie korzystaj** z sortowania i paginacji po stronie backendu.
-Zwróć też proszę uwagę, że korzystamy z **Vuetify v2**, a nie v3 - więc dokumentacje przełącz na poprawną wersję
-
-Napisz kod najlepiej jak potrafisz i postaraj się wykorzystać najnowsze praktyki ;)
-
-**Powodzenia!**
+ 
+## API Endpoints
+- `/vehicles` **[GET]** - index, main template
+- `/vehicles/list` **[GET]** - vehicle list
+- `/vehicles/save/{id}` **[POST]** - save vehicle
+- `/vehicles/delete/{id}` **[POST]** - delete vehicle
+ 
+## Working with the Code - What Needs to Be Done?
+The controller `/app/Controller/VehicleController.php` and the classes in the DDD structure in the `/src` directory need to be completed.
+ 
+The entire table and Vuetify components should be completed in the `/resources` directory.  
+Use the already installed `axios` to call the API endpoints. Use the `VDataTable` component from Vuetify and **do not use** sorting and pagination on the backend.  
+ 
+Please note that we are using **Vuetify v2**, not v3, so make sure to check the correct version of the documentation.
+ 
+Write the best code you can and try to apply the latest best practices. 🚀  
+ 
+**Good luck!** 🎉
