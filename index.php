@@ -14,6 +14,13 @@ use Symfony\Component\Routing\{
 
 try {
     $routes = new RouteCollection();
+
+    $routes->add('home', new Route(
+        path: '/',
+        defaults: ['controller' => VehicleController::class, 'method' => 'index'],
+        methods: ['GET'],
+    ));
+
     $routes->add('index', new Route(
         path: '/vehicles',
         defaults: ['controller' => VehicleController::class, 'method' => 'index'],

@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8008:80"
+    volumes:
+      - .:/var/www/html
+    environment: {}
+    restart: unless-stopped

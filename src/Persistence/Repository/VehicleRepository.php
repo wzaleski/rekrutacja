@@ -5,6 +5,7 @@ namespace Persistence\Repository;
 use App\SQLiteConnection;
 use Domain\Entity\Vehicle;
 use Domain\Repository\VehicleRepositoryInterface;
+use PDO;
 
 class VehicleRepository implements VehicleRepositoryInterface
 {
@@ -17,7 +18,7 @@ class VehicleRepository implements VehicleRepositoryInterface
 
     public function getList()
     {
-        $results = $this->pdo->query('SELECT * FROM vehicles');
+        $results = $this->pdo->query('SELECT * FROM vehicles', PDO::FETCH_ASSOC);
 
         $items = [];
         foreach ($results as $row) {
