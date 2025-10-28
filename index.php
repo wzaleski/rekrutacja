@@ -15,12 +15,6 @@ use Symfony\Component\Routing\{
 try {
     $routes = new RouteCollection();
 
-    $routes->add('home', new Route(
-        path: '/',
-        defaults: ['controller' => VehicleController::class, 'method' => 'index'],
-        methods: ['GET'],
-    ));
-
     $routes->add('index', new Route(
         path: '/vehicles',
         defaults: ['controller' => VehicleController::class, 'method' => 'index'],
@@ -31,17 +25,28 @@ try {
         defaults: ['controller' => VehicleController::class, 'method' => 'list'],
         methods: ['GET'],
     ));
-    $routes->add('save', new Route(
-        path: '/vehicles/save/{id}',
-        defaults: ['controller' => VehicleController::class, 'method' => 'save'],
+    $routes->add('get_by_id', new Route(
+        path: '/vehicles/{id}',
+        defaults: ['controller' => VehicleController::class, 'method' => 'getById'],
         requirements: ['id' => '[0-9]+'],
+        methods: ['GET'],
+    ));
+    $routes->add('vehicle_create', new Route(
+        path: '/vehicles',
+        defaults: ['controller' => VehicleController::class, 'method' => 'save'],
         methods: ['POST'],
     ));
-    $routes->add('delete', new Route(
-        path: '/vehicles/delete/{id}',
+    $routes->add('vehicle_update', new Route(
+        path: '/vehicles/{id}',
+        defaults: ['controller' => VehicleController::class, 'method' => 'save'],
+        requirements: ['id' => '[0-9]+'],
+        methods: ['PUT'],
+    ));
+    $routes->add('vehicle_delete', new Route(
+        path: '/vehicles/{id}',
         defaults: ['controller' => VehicleController::class, 'method' => 'delete'],
         requirements: ['id' => '[0-9]+'],
-        methods: ['POST'],
+        methods: ['DELETE'],
     ));
 
     $request = Request::createFromGlobals();
@@ -56,7 +61,7 @@ try {
     $action = $parameters['method'];
     $controller->$action(
         $parameters['id'] ?? null,
-        $request->getMethod() === 'POST' ? $request : null,
+        in_array($request->getMethod(),['POST', 'PUT']) ? $request : null,
     );
 } catch (ResourceNotFoundException $e) {
     (new Response(content: $e->getMessage(), status: 404))->send();

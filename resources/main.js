@@ -1,10 +1,20 @@
-import Vue from 'vue'
-import 'material-design-icons-iconfont/dist/material-design-icons.css'
-import vuetify from "./plugins/vuetify";
+import { createApp } from 'vue'
 import App from './App.vue'
 
-new Vue({
-    el: '#app',
-    vuetify,
-    render: (h) => h(App),
-});
+// Vuetify 3
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+
+// Material Design Icons
+import '@mdi/font/css/materialdesignicons.css'
+
+const vuetify = createVuetify({
+    components,
+    directives,
+})
+
+const app = createApp(App)
+app.use(vuetify)
+app.mount('#app')
